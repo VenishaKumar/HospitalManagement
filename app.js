@@ -40,8 +40,8 @@ app.get("/", (req, res) => {
 app.use("/patient", patientRoutes);
 
 // Start the server
-const PORT = process.env.OPENSHIFT_NODEJS_PORT || 8080;
-const IP = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
-app.listen(PORT, IP, () => {
-  console.log(`Server running on ${IP}:${PORT}`);
+const PORT =  8080;
+
+app.listen(PORT,  () => {
+  console.log(`Server running on ${PORT}`);
 });
