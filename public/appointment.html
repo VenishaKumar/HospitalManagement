@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Appointment</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 50%;
+            margin: auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+            margin-top: 50px;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .submit-btn {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            width: 100%;
+        }
+        .submit-btn:hover {
+            background-color: #218838;
+        }
+    </style>
+    <script>
+        async function bookAppointment(event) {
+            event.preventDefault(); // ✅ Prevent page refresh
+
+            const doctor = document.getElementById("doctor").value;
+            const date = document.getElementById("date").value;
+            const time = document.getElementById("time").value;
+            const reason = document.getElementById("reason").value;
+
+            // ✅ Debugging - Check values before sending request
+            console.log("Booking Appointment:", { doctor, date, time, reason });
+
+            try {
+                const response = await fetch("/patient/book-appointment", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ doctor, date, time, reason })
+                });
+
+                const result = await response.json();
+                console.log("Response:", result); // ✅ Debugging Response
+
+                if (response.ok) {
+                    alert("Appointment booked successfully!");
+                    window.location.href = "/home.html"; // ✅ Redirect to home page
+                } else {
+                    alert("Error: " + result.message);
+                }
+            } catch (error) {
+                console.error("Fetch Error:", error);
+                alert("An error occurred. Please try again.");
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h2>Book an Appointment</h2>
+        <form onsubmit="bookAppointment(event)">
+            <label for="doctor">Choose a Doctor:</label>
+            <select id="doctor" required>
+                <option value="Dr. Smith - Cardiologist">Dr. Smith - Cardiologist</option>
+                <option value="Dr. Patel - Dermatologist">Dr. Patel - Dermatologist</option>
+                <option value="Dr. Lee - Neurologist">Dr. Lee - Neurologist</option>
+                <option value="Dr. Kumar - General Physician">Dr. Kumar - General Physician</option>
+            </select>
+
+            <label for="date">Select Date:</label>
+            <input type="date" id="date" required>
+
+            <label for="time">Select Time:</label>
+            <input type="time" id="time" required>
+
+            <label for="reason">Reason for Appointment:</label>
+            <textarea id="reason" placeholder="Briefly explain your reason for the appointment" required></textarea>
+
+            <button type="submit" class="submit-btn">Book Appointment</button>
+        </form>
+    </div>
+</body>
+</html>

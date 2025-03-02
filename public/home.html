@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            padding: 20px;
+        }
+        .profile-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            background-color: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        .dashboard, .history {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .card {
+            background-color: white;
+            width: 200px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.2s ease-in-out;
+        }
+        .card:hover {
+            transform: scale(1.05);
+        }
+        .history-card {
+            width: 80%;
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
+            text-align: left;
+        }
+        .status-pending { color: orange; }
+        .status-approved { color: green; }
+        .status-rejected { color: red; }
+        .logout-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: red;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+    <script>
+        async function checkSession() {
+            const response = await fetch("/patient/session");
+            const data = await response.json();
+
+            if (!data.user) {
+                window.location.href = "/login.html"; // Redirect to login if session is missing
+            } else {
+                document.getElementById("user-name").innerText = data.user.name;
+                document.getElementById("user-phone").innerText = data.user.phone;
+                fetchAppointments(); // Load appointment history after login check
+            }
+        }
+
+        function logout() {
+            fetch("/patient/logout")
+                .then(() => {
+                    window.location.href = "/login.html";
+                });
+        }
+
+        function editProfile() {
+            window.location.href = "/profile.html";
+        }
+
+        async function fetchAppointments() {
+            const response = await fetch("/patient/appointments");
+            const data = await response.json();
+            const historyContainer = document.getElementById("appointment-history");
+            
+            historyContainer.innerHTML = ""; // Clear previous history
+
+            if (data.appointments.length === 0) {
+                historyContainer.innerHTML = "<p>No appointment history found.</p>";
+                return;
+            }
+
+            data.appointments.forEach(appointment => {
+                const card = document.createElement("div");
+                card.classList.add("history-card");
+                
+                let statusClass = "status-pending";
+                if (appointment.status === "Approved") statusClass = "status-approved";
+                if (appointment.status === "Rejected") statusClass = "status-rejected";
+
+                card.innerHTML = `
+                    <h3>${appointment.doctor}</h3>
+                    <p><strong>Date:</strong> ${appointment.date} at ${appointment.time}</p>
+                    <p><strong>Reason:</strong> ${appointment.reason}</p>
+                    <p><strong>Status:</strong> <span class="${statusClass}">${appointment.status}</span></p>
+                `;
+                historyContainer.appendChild(card);
+            });
+        }
+
+        window.onload = checkSession;
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Hospital Dashboard</h1>
+
+        <!-- Profile Section -->
+        <div class="profile-section">
+            <img src="profile-icon.png" class="profile-logo" alt="Edit Profile" onclick="editProfile()">
+            <div>
+                <h3 id="user-name">Loading...</h3>
+                <p>📞 <span id="user-phone">Loading...</span></p>
+            </div>
+        </div>
+
+        <!-- Dashboard Section -->
+        <div class="dashboard">
+            <div class="card" onclick="window.location.href='/appointment.html'">
+                <h3>📅 Book Appointment</h3>
+                <p>Schedule your doctor visit</p>
+            </div>
+            <div class="card" onclick="window.location.href='/medical-records.html'">
+                <h3>📂 Medical Records</h3>
+                <p>View past medical history</p>
+            </div>
+            
+            <div class="card" onclick="window.location.href='/prescriptions.html'">
+                <h3>📝 Prescriptions</h3>
+                <p>View doctor prescriptions</p>
+            </div>
+            <div class="card" onclick="window.location.href='/consultation.html'">
+                <h3>👩‍⚕️ Consultation</h3>
+                <p>Connect with a specialist</p>
+            </div>
+        </div>
+
+        <!-- Appointment History Section -->
+        <h2>📜 Appointment History</h2>
+        <div id="appointment-history" class="history">
+            <p>Loading...</p>
+        </div>
+
+        <!-- Logout Button -->
+        <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+</body>
+</html>
