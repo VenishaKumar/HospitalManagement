@@ -59,6 +59,7 @@
         .status-pending { color: orange; }
         .status-approved { color: green; }
         .status-rejected { color: red; }
+        .rejection-message { font-size: 0.9em; color: red; margin-top: 5px; }
         .logout-btn {
             margin-top: 20px;
             padding: 10px 20px;
@@ -111,7 +112,7 @@
                 card.classList.add("history-card");
                 
                 let statusClass = "status-pending";
-                if (appointment.status === "Approved") statusClass = "status-approved";
+                if (appointment.status === "Confirmed") statusClass = "status-approved";
                 if (appointment.status === "Rejected") statusClass = "status-rejected";
 
                 card.innerHTML = `
@@ -119,6 +120,7 @@
                     <p><strong>Date:</strong> ${appointment.date} at ${appointment.time}</p>
                     <p><strong>Reason:</strong> ${appointment.reason}</p>
                     <p><strong>Status:</strong> <span class="${statusClass}">${appointment.status}</span></p>
+                    ${appointment.status === "Rejected" ? `<p class="rejection-message"><strong>Rejection Reason:</strong> ${appointment.rejectionMessage}</p>` : ""}
                 `;
                 historyContainer.appendChild(card);
             });
@@ -151,13 +153,18 @@
                 <p>View past medical history</p>
             </div>
             
-            <div class="card" onclick="window.location.href='/prescriptions.html'">
+            <div class="card" onclick="window.location.href='/viewprescriptions.html'">
                 <h3>📝 Prescriptions</h3>
                 <p>View doctor prescriptions</p>
             </div>
             <div class="card" onclick="window.location.href='/consultation.html'">
                 <h3>👩‍⚕️ Consultation</h3>
                 <p>Connect with a specialist</p>
+            </div>
+
+            <div class="card" onclick="window.location.href='patient.html'">
+                <h3>👤 View Profile</h3>
+                <p>Check your personal details</p>
             </div>
         </div>
 

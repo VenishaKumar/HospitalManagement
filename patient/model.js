@@ -1,24 +1,12 @@
-const { MongoClient } = require("mongodb");
+const { connectDB, client,dbName } = require("../db"); 
 
-const uri = "mongodb://localhost:27017/healthcare";
-const client = new MongoClient(uri);
-const dbName = "healthcare";
-const collectionName = "patients";
-const collectionA="Appointments";
-
-async function connectDB() {
-  if (!client.topology || !client.topology.isConnected()) {
-      await client.connect();
-  }
-  return client.db(dbName);
-}
-
+connectDB
 // Save a new patient to the database
 const savePatient = async (patient) => {
   try {
     await client.connect();
     const db = client.db(dbName);
-    const collection = db.collection(collectionName);
+    const collection = db.collection("patients");
     await collection.insertOne(patient);
   } finally {
     await client.close();
@@ -30,7 +18,7 @@ const findPatientByphone = async (phone) => {
   try {
     await client.connect();
     const db = client.db(dbName);
-    const collection = db.collection(collectionName);
+    const collection = db.collection("patients");
     return await collection.findOne({ phone });
   } finally {
     await client.close();
@@ -40,7 +28,7 @@ const findPatientByphone = async (phone) => {
 const saveAppointment = async (appointment) => {
   try {
       const db = await connectDB();
-      const collection = db.collection(collectionA);
+      const collection = db.collection("Appointments");
       await collection.insertOne(appointment);
       console.log("Appointment saved successfully!");
   } catch (error) {
@@ -53,7 +41,7 @@ const saveAppointment = async (appointment) => {
 const findAppointmentsByUser = async (userId) => {
   try {
       const db = await connectDB(); 
-      const collection = db.collection("appointments");
+      const collection = db.collection("Appointments");
       return await collection.find({ userId: userId }).toArray();
   } catch (error) {
       console.error("Error retrieving appointments:", error);
@@ -61,4 +49,37 @@ const findAppointmentsByUser = async (userId) => {
   }
 };
 
-module.exports = { savePatient, findPatientByphone ,saveAppointment, findAppointmentsByUser};
+const getPrescriptionsByPhone = async (phoneNumber) => {
+  try {
+      const db = await connectDB();
+      const collection = db.collection("prescriptions");
+
+      const prescriptions = await collection.find({ "patient.contact": phoneNumber }).toArray();
+      console.log("✅ Prescriptions found:");
+      return prescriptions;
+  } catch (error) {
+      console.error("❌ Error retrieving prescriptions:", error);
+      throw error;
+  }
+};
+
+
+const updatePatient = async (phone, updatedData) => {
+  try {
+    await client.connect();
+    const db = client.db(dbName);
+    const collection = db.collection("patients");
+    console.log(updatedData)
+    await collection.updateOne({ phone }, { $set: updatedData });
+  } finally {
+    await client.close();
+  }
+};
+
+
+
+
+
+
+
+module.exports = { savePatient, findPatientByphone ,saveAppointment, findAppointmentsByUser,getPrescriptionsByPhone,updatePatient};

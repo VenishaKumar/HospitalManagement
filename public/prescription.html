@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Write Prescription</title>
+</head>
+<body>
+
+    <h2>Write a Prescription</h2>
+
+    <form id="prescriptionForm" action="doctor/add-prescription" method="POST">
+        <h3>Patient Details</h3>
+        <label>Name: <input type="text" name="patientName" required></label><br>
+        <label>Age: <input type="number" name="patientAge" required></label><br>
+        <label>Gender:
+            <select name="patientGender">
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+            </select>
+        </label><br>
+        <label>Contact: <input type="text" name="patientContact"></label><br>
+
+        <h3>Doctor Details</h3>
+        <label>Name: <input type="text" name="doctorName" required></label><br>
+        <label>Specialization: <input type="text" name="doctorSpecialization"></label><br>
+        <label>Contact: <input type="text" name="doctorContact"></label><br>
+
+        <h3>Medical Details</h3>
+        <label>Diagnosis: <input type="text" name="diagnosis" required></label><br>
+
+        <h3>Medicines</h3>
+        <div id="medicines">
+            <div class="medicine">
+                <label>Name: <input type="text" name="medName[]" required></label>
+                <label>Dosage: <input type="text" name="medDosage[]" required></label>
+                <label>Instructions: <input type="text" name="medInstructions[]"></label>
+                <button type="button" onclick="removeMedicine(this)">Remove</button>
+            </div>
+        </div>
+        <button type="button" onclick="addMedicine()">Add Medicine</button><br>
+
+        <h3>Additional Instructions</h3>
+        <textarea name="additionalInstructions"></textarea><br>
+
+        <button type="submit">Save Prescription</button>
+    </form>
+
+    <script>
+        function addMedicine() {
+            let medDiv = document.createElement("div");
+            medDiv.classList.add("medicine");
+            medDiv.innerHTML = `
+                <label>Name: <input type="text" name="medName[]" required></label>
+                <label>Dosage: <input type="text" name="medDosage[]" required></label>
+                <label>Instructions: <input type="text" name="medInstructions[]"></label>
+                <button type="button" onclick="removeMedicine(this)">Remove</button>
+            `;
+            document.getElementById("medicines").appendChild(medDiv);
+        }
+
+        function removeMedicine(button) {
+            button.parentElement.remove();
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,82 @@
+<button class="logout-btn" onclick="logout()">Logout</button>
+
+<h2>Admin Dashboard - Pending Appointments</h2>
+<table border="1">
+    <thead>
+        <tr>
+            <th>Patient</th>
+            <th>Doctor</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Phone</th>
+            <th>Reason</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody id="appointmentTable"></tbody>
+</table>
+
+<script>
+async function loadAppointments() {
+    try {
+        const response = await fetch("/admin/appointments/pending");
+        const appointments = await response.json();
+        const table = document.getElementById("appointmentTable");
+        table.innerHTML = "";
+
+        appointments.forEach(app => {
+            const row = `<tr>
+                <td>${app.patientName || "N/A"}</td>
+                <td>${app.doctorName || "N/A"}</td>
+                <td>${app.appointmentDate || "N/A"}</td>
+                <td>${app.time || "N/A"}</td>
+                <td>${app.phoneNumber || "N/A"}</td>
+                <td>${app.reason || "N/A"}</td>
+                <td>
+                    <button onclick="approve('${app._id}')">Approve</button>
+                    <button onclick="reject('${app._id}')">Reject</button>
+                </td>
+            </tr>`;
+            table.innerHTML += row;
+        });
+    } catch (error) {
+        console.error("❌ Error loading appointments:", error);
+    }
+}
+
+async function approve(appointmentId) {
+    const response = await fetch("/admin/appointments/approve", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ appointmentId })
+    });
+    const data = await response.json();
+    alert(data.message);
+    loadAppointments();
+}
+
+async function reject(appointmentId) {
+    const rejectionMessage = prompt("Enter rejection reason:");
+    if (!rejectionMessage) return;
+
+    const response = await fetch("/admin/appointments/reject", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ appointmentId, rejectionMessage })
+    });
+    const data = await response.json();
+    alert(data.message);
+    loadAppointments();
+}
+
+// Load appointments on page load
+document.addEventListener("DOMContentLoaded", loadAppointments);
+
+
+function logout() {
+    fetch("/admin/logout")
+        .then(() => {
+            window.location.href = "/adminlogin.html";
+        });
+}
+</script>

@@ -1,11 +1,17 @@
 const express = require("express");
-const { registerPatient, loginPatient,logoutPatient, getAppointments ,bookAppointment} = require("./controller");
+const path = require("path"); // Add this
+const { registerPatient, loginPatient, logoutPatient, getAppointments, bookAppointment, getPrescriptions ,getPatientProfile, updatePatientProfile} = require("./controller");
+
 const router = express.Router();
 
 // POST route for patient registration
 router.post("/register", registerPatient);
 router.post("/login", loginPatient);
 router.get("/logout",logoutPatient)
+// Get Patient Profile
+router.get("/profile", getPatientProfile);
+router.post("/profile/update", updatePatientProfile);
+
 
 router.get("/session",(req,res) =>{
   if(req.session.user){
@@ -25,4 +31,8 @@ router.get("/home", (req, res) => {
 router.get("/appointments",getAppointments)
 router.post("/book-appointment", bookAppointment);
 
+
+
+// Add route for fetching prescriptions
+router.get("/viewprescriptions", getPrescriptions)
 module.exports = router;

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Appointments</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 20px;
+            padding: 20px;
+        }
+        .container {
+            max-width: 700px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            text-align: center;
+        }
+        .appointment-card {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            background: #fafafa;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="appointments-container">
+        <h2>Loading Appointments...</h2>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            try {
+                const response = await fetch("doctor/appointments"); // Fetch the HTML response
+                const appointmentsHTML = await response.text(); // Convert to text
+
+                document.getElementById("appointments-container").innerHTML = appointmentsHTML;
+            } catch (error) {
+                console.error("❌ Error fetching appointments:", error);
+                document.getElementById("appointments-container").innerHTML = "<h3>Error loading appointments</h3>";
+            }
+        });
+    </script>
+
+</body>
+</html>
