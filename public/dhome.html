@@ -9,69 +9,164 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
         }
 
         body {
-            background: #f4f4f4;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            background: linear-gradient(135deg, #e0f7fa, #80deea);
             height: 100vh;
+            width: 100vw;
+            display: flex;
+            flex-direction: column;
+            color: #004e89;
         }
 
-        .dashboard-container {
-            background: #ffffff;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            width: 350px;
-        }
-
-        h2 {
-            color: #333;
-            margin-bottom: 20px;
-        }
-
-        nav ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        nav ul li {
-            margin: 10px 0;
-        }
-
-        nav ul li a {
-            text-decoration: none;
-            background: #007bff;
+        .navbar {
+            background-color: rgba(0, 150, 255, 0.5);
             color: white;
-            padding: 12px 20px;
-            border-radius: 5px;
-            display: block;
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.8);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-container img {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+        }
+
+        .logo-container b {
+            font-size: 2rem;
+        }
+
+        .navbar a {
+            color: #ffffff;
+            text-decoration: none;
             font-weight: bold;
+            margin: 0 20px;
+            font-size: 1.6rem;
             transition: 0.3s;
         }
 
-        nav ul li a:hover {
-            background: #0056b3;
+        .navbar a:hover {
+            color: #b3e5fc;
+        }
+
+        .dashboard-container {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .image-container {
+            flex: 1.5;
+            background-image: url('images/doctor_image.jpg');
+            background-size: cover;
+            background-position: center;
+            border-radius: 15px;
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.5);
+        }
+
+        .content-container {
+            flex: 1;
+            background: rgba(0, 150, 255, 0.5);
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-radius: 15px;
+            backdrop-filter: blur(20px);
+        }
+
+        .content-container h2 {
+            color: #ffffff;
+            margin-bottom: 30px;
+            font-size: 3rem;
+            text-shadow: 2px 2px 5px #000;
+        }
+
+        .card-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+        }
+
+        .card {
+            background: #ffffff;
+            color: #0277bd;
+            padding: 70px 100px;
+            border-radius: 20px;
+            text-align: center;
+            width: 100%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            transition: transform 0.3s, background 0.3s;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .card:nth-child(3) {
+            grid-column: span 2;
+            justify-self: center;
+            width: 80%;
+        }
+
+        .card:hover {
+            background: #03a9f4;
+            color: #ffffff;
+            transform: scale(1.1);
+        }
+
+        .logout-btn {
+            background: #0288d1;
+            color: #fff;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: #0277bd;
         }
     </style>
 </head>
 <body>
-    <div class="dashboard-container">
-        <h2>Welcome, Doctor</h2>
-        <nav>
-            <ul>
-                <li><a href="dappointments.html">View Appointments</a></li>
-                <li><a href="patient_detail.html">Patient Records</a></li>
-                <li><a href="prescription.html">Prescribe Medication</a></li>
-                <li><button class="logout-btn" onclick="logout()">Logout</button></li>
-            </ul>
-
-        </nav>
+    <div class="navbar">
+        <div class="logo-container">
+            <img src="images/image.png" alt="Logo">
+            <b>AstraCare Hospital</b>
+        </div>
+        <div>
+            <a href="dhome.html">Home</a>
+            <a href="doctors.html">Doctors</a>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
     </div>
+
+    <div class="dashboard-container">
+        <div class="image-container"></div>
+        <div class="content-container">
+            <h2>Welcome, Doctor</h2>
+            <div class="card-container">
+                <div class="card" onclick="location.href='dappointments.html'">Appointments</div>
+                <div class="card" onclick="location.href='patient_detail.html'">Patient Records</div>
+                <div class="card" onclick="location.href='prescription.html'">Prescribe</div>
+            </div>
+        </div>
+    </div>
+
     <script>
         function logout() {
             fetch("/doctor/logoutDoctor")

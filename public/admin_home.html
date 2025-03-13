@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; background-color: #f8f8f8; }
+        .container { max-width: 600px; margin: auto; padding: 20px; background: white; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        h2 { color: #333; }
+        .btn { display: block; width: 100%; padding: 15px; margin: 10px 0; background: blue; color: white; text-decoration: none; font-size: 18px; border-radius: 5px; }
+        .btn:hover { background: darkblue; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Admin Dashboard</h2>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+        <a href="manage_patients.html" class="btn">Manage Patients</a>
+        <a href="manage_doctors.html" class="btn">Manage Doctors</a>
+        <a href="appointmentreq.html" class="btn">Pending Appointments</a>
+        <a href="/search_appointments.html">Search Appointments</a>
+
+    </div>
+<script>
+  function logout() {
+    fetch("/admin/logout")
+        .then(() => {
+            window.location.href = "/adminlogin.html";
+        });
+}
+</script>
+</body>
+</html>

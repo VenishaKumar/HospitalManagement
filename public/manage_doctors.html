@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Doctors</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 20px;
+            padding: 20px;
+        }
+        .container {
+            max-width: 700px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        h2, h3 {
+            text-align: center;
+        }
+        .doctor-card {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            background: #fafafa;
+        }
+        .btn {
+            padding: 5px 10px;
+            cursor: pointer;
+            border: none;
+            color: white;
+            border-radius: 3px;
+        }
+        .delete-btn { background: red; }
+        .add-btn { background: green; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Manage Doctors</h2>
+
+        <h3>Add New Doctor</h3>
+        <form action="admin/doctors/add" method="post">
+            <input type="text" name="name" placeholder="Name" required>
+            <input type="email" name="email" placeholder="Email" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <input type="text" name="phone" placeholder="Phone Number" required>
+            <input type="text" name="specialization" placeholder="Specialization" required>
+            <input type="text" name="clinicAddress" placeholder="Clinic Address" required>
+            <button type="submit" class="btn add-btn">Add Doctor</button>
+        </form>
+
+        <h3>Existing Doctors</h3>
+        <div id="doctors-container">
+            <h3>Loading Doctors...</h3>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            try {
+                const response = await fetch("admin/doctors"); // Fetch doctor list
+                const doctorsHTML = await response.text(); // Convert response to text
+
+                document.getElementById("doctors-container").innerHTML = doctorsHTML;
+            } catch (error) {
+                console.error("❌ Error fetching doctors:", error);
+                document.getElementById("doctors-container").innerHTML = "<h3>Error loading doctors</h3>";
+            }
+        });
+    </script>
+
+</body>
+</html>

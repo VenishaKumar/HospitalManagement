@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Appointments</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f8f8f8;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #333;
+        }
+        input, button {
+            margin: 10px;
+            padding: 10px;
+            font-size: 16px;
+            width: 80%;
+        }
+        button {
+            background-color: blue;
+            color: white;
+            border: none;
+            cursor: pointer;
+            width: 85%;
+        }
+        button:hover {
+            opacity: 0.8;
+        }
+        #results {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Search Appointments</h2>
+
+        <form id="searchForm">
+            <input type="text" id="doctor" placeholder="Enter Doctor Name" required>
+            <input type="date" id="date" required>
+            <button type="submit">Search</button>
+        </form>
+
+        <div id="results">
+            <h3>Results will be displayed here...</h3>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("searchForm").addEventListener("submit", async function(event) {
+            event.preventDefault();
+
+            const doctor = document.getElementById("doctor").value;
+            const date = document.getElementById("date").value;
+
+            if (!doctor || !date) {
+                alert("Please enter both doctor name and date.");
+                return;
+            }
+
+            try {
+                const response = await fetch(`/admin/appointments/search?doctor=${doctor}&date=${date}`);
+                const data = await response.text();
+
+                document.getElementById("results").innerHTML = data;
+            } catch (error) {
+                console.error("❌ Error fetching appointments:", error);
+                document.getElementById("results").innerHTML = "<h3>Error loading appointments</h3>";
+            }
+        });
+    </script>
+
+</body>
+</html>

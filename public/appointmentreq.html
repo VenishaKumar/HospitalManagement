@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Appointments</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 20px;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+        th {
+            background: blue;
+            color: white;
+        }
+        .btn {
+            padding: 5px 10px;
+            cursor: pointer;
+            border: none;
+            color: white;
+            border-radius: 3px;
+        }
+        .approve-btn { background: green; }
+        .reject-btn { background: red; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Manage Pending Appointments</h2>
+        <div id="appointments-container">
+            <h3>Loading Appointments...</h3>
+        </div>
+    </div>
+
+    <script>
+        async function loadAppointments() {
+            try {
+                const response = await fetch("/admin/appointments/pending"); // Fetch the HTML response
+                const appointmentsHTML = await response.text(); // Convert response to text
+
+                document.getElementById("appointments-container").innerHTML = appointmentsHTML;
+            } catch (error) {
+                console.error("❌ Error fetching appointments:", error);
+                document.getElementById("appointments-container").innerHTML = "<h3>Error loading appointments</h3>";
+            }
+        }
+
+        // Load appointments when the page loads
+        document.addEventListener("DOMContentLoaded", loadAppointments);
+    </script>
+
+</body>
+</html>

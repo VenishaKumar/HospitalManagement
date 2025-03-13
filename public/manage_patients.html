@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Patients</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 20px;
+            padding: 20px;
+        }
+        .container {
+            max-width: 700px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            text-align: center;
+        }
+        .patient-card {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            background: #fafafa;
+        }
+        .btn {
+            padding: 5px 10px;
+            cursor: pointer;
+            border: none;
+            color: white;
+            border-radius: 3px;
+        }
+        .edit-btn { background: orange; }
+        .delete-btn { background: red; }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="patients-container">
+        <h2>Loading Patients...</h2>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            try {
+                const response = await fetch("admin/patients"); // Fetch the HTML response
+                const patientsHTML = await response.text(); // Convert to text
+
+                document.getElementById("patients-container").innerHTML = patientsHTML;
+            } catch (error) {
+                console.error("❌ Error fetching patients:", error);
+                document.getElementById("patients-container").innerHTML = "<h3>Error loading patients</h3>";
+            }
+        });
+    </script>
+
+</body>
+</html>

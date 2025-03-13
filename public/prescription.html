@@ -4,48 +4,209 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Write Prescription</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: url('https://media.istockphoto.com/vectors/abstract-geometric-medical-cross-shape-medicine-and-science-concept-vector-id911633218?k=20&m=911633218&s=612x612&w=0&h=B79KF2ZS-VbB_9valjf3xkrCrdKLCP0cyQa7G7YWWd8=') 
+                        no-repeat center center/cover;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* Navbar Styling */
+        .navbar {
+            background-color: rgba(0, 150, 255, 0.5);
+            color: white;
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.8);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-container img {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+        }
+
+        .logo-container b {
+            font-size: 2rem;
+        }
+
+        .navbar a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 0 20px;
+            font-size: 1.6rem;
+            transition: 0.3s;
+        }
+
+        .navbar a:hover {
+            color: #b3e5fc;
+        }
+
+        .logout-btn {
+            background: #0288d1;
+            color: #fff;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: #0277bd;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            width: 90%; 
+            max-width: 1000px;
+            max-height: 95vh;
+            overflow-y: auto;
+            margin-top: 100px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #002b5b;
+            margin-bottom: 20px;
+        }
+
+        h3 {
+            color: #0056b3;
+            margin-top: 15px;
+        }
+
+        label {
+            display: block;
+            margin-top: 8px;
+            font-weight: bold;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        .medicine {
+            background: #eef2ff;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        button {
+            margin-top: 15px;
+            padding: 10px;
+            width: 100%;
+            background-color: #00d9ff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background: #0099cc;
+        }
+
+        .remove-btn {
+            background: black;
+            margin-top: 10px;
+            width: auto;
+            padding: 5px 10px;
+        }
+
+    </style>
 </head>
 <body>
 
-    <h2>Write a Prescription</h2>
-
-    <form id="prescriptionForm" action="doctor/add-prescription" method="POST">
-        <h3>Patient Details</h3>
-        <label>Name: <input type="text" name="patientName" required></label><br>
-        <label>Age: <input type="number" name="patientAge" required></label><br>
-        <label>Gender:
-            <select name="patientGender">
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Other">Other</option>
-            </select>
-        </label><br>
-        <label>Contact: <input type="text" name="patientContact"></label><br>
-
-        <h3>Doctor Details</h3>
-        <label>Name: <input type="text" name="doctorName" required></label><br>
-        <label>Specialization: <input type="text" name="doctorSpecialization"></label><br>
-        <label>Contact: <input type="text" name="doctorContact"></label><br>
-
-        <h3>Medical Details</h3>
-        <label>Diagnosis: <input type="text" name="diagnosis" required></label><br>
-
-        <h3>Medicines</h3>
-        <div id="medicines">
-            <div class="medicine">
-                <label>Name: <input type="text" name="medName[]" required></label>
-                <label>Dosage: <input type="text" name="medDosage[]" required></label>
-                <label>Instructions: <input type="text" name="medInstructions[]"></label>
-                <button type="button" onclick="removeMedicine(this)">Remove</button>
-            </div>
+    <!-- Navigation Bar -->
+    <div class="navbar">
+        <div class="logo-container">
+            <img src="images/image.png" alt="Logo">
+            <b>AstraCare Hospital</b>
         </div>
-        <button type="button" onclick="addMedicine()">Add Medicine</button><br>
+        <div>
+            <a href="dhome.html">Home</a>
+            <a href="doctors.html">Doctors</a>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </div>
 
-        <h3>Additional Instructions</h3>
-        <textarea name="additionalInstructions"></textarea><br>
+    <div class="container">
+        <h2>Write a Prescription</h2>
 
-        <button type="submit">Save Prescription</button>
-    </form>
+        <form id="prescriptionForm" action="doctor/add-prescription" method="POST">
+
+            <h3>Patient Details</h3>
+            <label>Name: <input type="text" name="patientName" required></label>
+            <label>Age: <input type="number" name="patientAge" required></label>
+            <label>Gender:
+                <select name="patientGender">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+            </label>
+            <label>Contact: <input type="text" name="patientContact"></label>
+
+            <h3>Doctor Details</h3>
+            <label>Name: <input type="text" name="doctorName" required></label>
+            <label>Specialization: <input type="text" name="doctorSpecialization"></label>
+            <label>Contact: <input type="text" name="doctorContact"></label>
+
+            <h3>Medical Details</h3>
+            <label>Diagnosis: <input type="text" name="diagnosis" required></label>
+
+            <h3>Medicines</h3>
+            <div id="medicines">
+                <div class="medicine">
+                    <label>Name: <input type="text" name="medName[]" required></label>
+                    <label>Dosage: <input type="text" name="medDosage[]" required></label>
+                    <label>Instructions: <input type="text" name="medInstructions[]"></label>
+                    <button type="button" class="remove-btn" onclick="removeMedicine(this)">Remove</button>
+                </div>
+            </div>
+            <button type="button" onclick="addMedicine()">+ Add Medicine</button>
+
+            <h3>Additional Instructions</h3>
+            <textarea name="additionalInstructions" rows="3"></textarea>
+
+            <button type="submit">Save Prescription</button>
+        </form>
+    </div>
 
     <script>
         function addMedicine() {
@@ -55,7 +216,7 @@
                 <label>Name: <input type="text" name="medName[]" required></label>
                 <label>Dosage: <input type="text" name="medDosage[]" required></label>
                 <label>Instructions: <input type="text" name="medInstructions[]"></label>
-                <button type="button" onclick="removeMedicine(this)">Remove</button>
+                <button type="button" class="remove-btn" onclick="removeMedicine(this)">Remove</button>
             `;
             document.getElementById("medicines").appendChild(medDiv);
         }

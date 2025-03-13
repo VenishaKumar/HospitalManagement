@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctors - Sri Ramakrishna Hospital</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            text-align: center;
+            background: rgba(0, 214, 204, 0.7);;
+            color: white;
+            padding: 20px 0;
+        }
+        .container {
+            width: 90%;
+            margin: 20px auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        .doctor-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            cursor: pointer;
+        }
+        .doctor-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+        .doctor-card h3, .doctor-card p {
+            margin: 10px;
+            color: #333;
+        }
+        .profile {
+            width: 60%;
+            margin: 40px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            display: none;
+        }
+        .profile img {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 20px;
+        }
+        .profile h2 {
+            margin: 10px 0;
+            color: #333333;
+        }
+        .profile p {
+            color: #777;
+            margin: 5px 0;
+        }
+        .back-btn {
+            display: block;
+            width: 150px;
+            margin: 20px auto;
+            text-align: center;
+            padding: 10px;
+            background: rgba(0, 214, 204, 0.7);;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        footer {
+            background-color: rgba(0, 214, 204, 0.7);;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+        }
+        @media screen and (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        @media screen and (max-width: 480px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1> Doctors</h1>
+    </header>
+
+    <!-- Doctors List Section -->
+    <div class="container" id="doctor-list">
+        <!-- Doctor Cards (Will be populated by JavaScript) -->
+    </div>
+
+    <!-- Doctor Profile Section -->
+    <div class="profile" id="doctor-profile">
+        <img id="profile-img" src="" alt="Doctor Image">
+        <h2 id="profile-name"></h2>
+        <p><strong>Specialty:</strong> <span id="profile-specialty"></span></p>
+        <p><strong>Qualification:</strong> <span id="profile-qualification"></span></p>
+        <p><strong>Experience:</strong> <span id="profile-experience"></span></p>
+        <p><strong>Availability:</strong> <span id="profile-availability"></span></p>
+        <p><strong>Floor & Bay:</strong> <span id="profile-floor"></span></p>
+        <p><strong>About:</strong> <span id="profile-about"></span></p>
+        <a href="#" class="back-btn" onclick="showDoctors()">Back to Doctors</a>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 ASTROCARE  | All Rights Reserved</p>
+    </footer>
+
+    <script>
+        // Doctor data
+        const doctors = [
+            { id: 1, name: "Dr. John Doe", specialty: "Cardiology", img: "https://www.sriramakrishnahospital.com/wp-content/uploads/2020/07/doctor_manoharan_001.webp", qualification: "MBBS, MD", experience: "15 years", availability: "Mon-Fri (9 AM - 5 PM)", floor: "2nd Floor, Bay 5", about: "Expert in heart diseases." },
+            { id: 2, name: "Dr. Jane Smith", specialty: "Neurology", img: "https://www.sriramakrishnahospital.com/wp-content/uploads/2020/09/DR.-Kanmani.png", qualification: "MBBS, DM", experience: "10 years", availability: "Tue-Thu (10 AM - 4 PM)", floor: "3rd Floor, Bay 2", about: "Specializes in treating neurological disorders." },
+            { id: 3, name: "Dr. Emily Clark", specialty: "General Surgery", img: "https://www.sriramakrishnahospital.com/wp-content/uploads/2020/09/doctor_prabha_001.webp", qualification: "MBBS, MS", experience: "8 years", availability: "Mon-Sat (8 AM - 2 PM)", floor: "1st Floor, Bay 3", about: "Performs general and laparoscopic surgeries." },
+            { id: 4, name: "Dr. Michael Brown", specialty: "Pediatrics", img: "https://www.sriramakrishnahospital.com/wp-content/uploads/2020/09/sedhu.png", qualification: "MBBS, DCH", experience: "12 years", availability: "Wed-Sat (9 AM - 1 PM)", floor: "4th Floor, Bay 1", about: "Expert in child healthcare and vaccinations." },
+            { id: 5, name: "Dr. Olivia Davis", specialty: "Orthopedic Surgery", img: "https://www.sriramakrishnahospital.com/wp-content/uploads/2020/09/dr-assmi.png", qualification: "MBBS, MS (Ortho)", experience: "18 years", availability: "Mon-Fri (11 AM - 6 PM)", floor: "5th Floor, Bay 4", about: "Specialist in joint replacement and trauma surgeries." },
+            { id: 6, name: "Dr. Lucas White", specialty: "Dermatology", img: "https://www.sriramakrishnahospital.com/wp-content/uploads/2020/09/diabet1-2.png", qualification: "MBBS, MD (Dermatology)", experience: "9 years", availability: "Mon-Sat (10 AM - 3 PM)", floor: "2nd Floor, Bay 7", about: "Treats skin, hair, and nail disorders." },
+            { id: 7, name: "Dr. Isabella Harris", specialty: "Gynecology", img: "https://www.sriramakrishnahospital.com/wp-content/uploads/2023/08/DR-physio.png", qualification: "MBBS, MD (OBG)", experience: "14 years", availability: "Tue-Fri (9 AM - 5 PM)", floor: "3rd Floor, Bay 6", about: "Expert in women's health and pregnancy care." },
+            { id: 8, name: "Dr. Ethan Wilson", specialty: "Urology", img: "https://www.sriramakrishnahospital.com/wp-content/uploads/2024/01/doctor_prabha_001-1.webp", qualification: "MBBS, MCh (Urology)", experience: "11 years", availability: "Mon-Sat (8 AM - 4 PM)", floor: "4th Floor, Bay 8", about: "Specializes in kidney and urinary tract disorders." },
+            { id: 9, name: "Dr. Sophia Lee", specialty: "Internal Medicine", img: "https://www.sriramakrishnahospital.com/wp-content/uploads/2020/09/DR.-Suganya.png", qualification: "MBBS, MD (Medicine)", experience: "16 years", availability: "Mon-Fri (10 AM - 6 PM)", floor: "2nd Floor, Bay 9", about: "Provides comprehensive medical care for adults." },
+            { id: 10, name: "Dr. Daniel Taylor", specialty: "Psychiatry", img: "https://www.sriramakrishnahospital.com/wp-content/uploads/2020/09/anes1-1.png", qualification: "MBBS, MD (Psychiatry)", experience: "13 years", availability: "Tue-Sat (12 PM - 7 PM)", floor: "5th Floor, Bay 10", about: "Treats mental health disorders." }
+        ];
+
+        function showDoctors() {
+            document.getElementById("doctor-list").style.display = "grid";
+            document.getElementById("doctor-profile").style.display = "none";
+        }
+
+        function showProfile(id) {
+            const doctor = doctors.find(d => d.id === id);
+            document.getElementById("profile-img").src = doctor.img;
+            document.getElementById("profile-name").innerText = doctor.name;
+            document.getElementById("profile-specialty").innerText = doctor.specialty;
+            document.getElementById("profile-qualification").innerText = doctor.qualification;
+            document.getElementById("profile-experience").innerText = doctor.experience;
+            document.getElementById("profile-availability").innerText = doctor.availability;
+            document.getElementById("profile-floor").innerText = doctor.floor;
+            document.getElementById("profile-about").innerText = doctor.about;
+            document.getElementById("doctor-list").style.display = "none";
+            document.getElementById("doctor-profile").style.display = "block";
+        }
+
+        window.onload = () => {
+            document.getElementById("doctor-list").innerHTML = doctors.map(d => `
+                <div class="doctor-card" onclick="showProfile(${d.id})">
+                    <img src="${d.img}" alt="${d.name}">
+                    <h3>${d.name}</h3>
+                    <p>${d.specialty}</p>
+                </div>
+            `).join('');
+        };
+    </script>
+</body>
+</html>

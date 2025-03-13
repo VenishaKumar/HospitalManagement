@@ -5,69 +5,175 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Book Appointment</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
-            text-align: center;
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #007bff;
+            padding: 15px 30px;
+            color: white;
+            width: 100%;
+            position: fixed; /* Fixes the navbar to the top */
+    top: 0; /* Aligns it to the very top */
+    left: 0;
+    z-index: 1000; 
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .navbar .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+        .navbar .logo img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 10px;
+        }
+        .navbar .nav-links {
+            display: flex;
+            gap: 15px;
+        }
+        .nav-links button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1em;
+            cursor: pointer;
+        }
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
         }
+
+        body {
+            background: url('https://i.pinimg.com/originals/4a/97/15/4a971554c8c61f8119469796b201c7f4.png') 
+                        no-repeat center center/cover;
+            display: flex;
+            padding-top: 70px;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 10px;
+        }
+
         .container {
-            width: 50%;
-            margin: auto;
-            background-color: white;
+            background: rgba(255, 255, 255, 0.95);
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-            margin-top: 50px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+            width: 95%;
+            max-width: 800px;
+            text-align: center;
         }
+
+        h2 {
+            color: #002b5b;
+            margin-bottom: 15px;
+            font-size: 22px;
+        }
+
+        label {
+            display: block;
+            text-align: left;
+            font-weight: bold;
+            margin: 8px 0 3px;
+        }
+
         input, select, textarea {
             width: 100%;
             padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
+            margin-top: 5px;
+            border: 1.5px solid #ccc;
             border-radius: 5px;
+            font-size: 15px;
         }
+
+        textarea {
+            resize: vertical;
+            height: 70px;
+        }
+
         .submit-btn {
-            background-color: #28a745;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
+            margin-top: 15px;
+            padding: 12px;
             width: 100%;
+            background-color: #00d9ff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
         }
+
         .submit-btn:hover {
-            background-color: #218838;
+            background: #00d9ff;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+            h2 {
+                font-size: 20px;
+            }
+            input, select, textarea {
+                font-size: 14px;
+            }
+            .submit-btn {
+                font-size: 15px;
+                padding: 10px;
+            }
         }
     </style>
     <script>
+        function logout() {
+            fetch("/patient/logout").then(() => {
+                window.location.href = "/login.html";
+            });
+        }
+        function viewProfile() {
+            window.location.href = "/profile.html";
+        }
+        function viewdoctor() {
+            window.location.href = "/doctor.html";
+        }
+        function viewhome() {
+            window.location.href = "/home.html";
+        }
+        function enable2FA() {
+            window.location.href = "patient/enable-2fa";
+        }
+
         async function bookAppointment(event) {
-            event.preventDefault(); // ✅ Prevent page refresh
+            event.preventDefault();
 
             const doctor = document.getElementById("doctor").value;
             const date = document.getElementById("date").value;
             const time = document.getElementById("time").value;
             const reason = document.getElementById("reason").value;
 
-            // ✅ Debugging - Check values before sending request
             console.log("Booking Appointment:", { doctor, date, time, reason });
 
             try {
                 const response = await fetch("/patient/book-appointment", {
                     method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
+                    headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ doctor, date, time, reason })
                 });
 
                 const result = await response.json();
-                console.log("Response:", result); // ✅ Debugging Response
+                console.log("Response:", result);
 
                 if (response.ok) {
                     alert("Appointment booked successfully!");
-                    window.location.href = "/home.html"; // ✅ Redirect to home page
+                    window.location.href = "/home.html";
                 } else {
                     alert("Error: " + result.message);
                 }
@@ -79,16 +185,24 @@
     </script>
 </head>
 <body>
+    <div class="navbar">
+        <div class="logo">
+            <img src="images/image.png" alt="Logo">
+            AstroCare
+        </div>
+        <div class="nav-links">
+            <button onclick="window.location.href='/home.html'">Home</button>
+            <button onclick="window.location.href='/doctor.html'">Doctor</button>
+            <button onclick="viewProfile()">View Profile</button>
+            <button onclick="enable2FA()">2FA</button>
+            <button onclick="logout()">Logout</button>
+        </div>
+    </div>
     <div class="container">
         <h2>Book an Appointment</h2>
         <form onsubmit="bookAppointment(event)">
             <label for="doctor">Choose a Doctor:</label>
-            <select id="doctor" required>
-                <option value="Dr. Smith - Cardiologist">Dr. Smith - Cardiologist</option>
-                <option value="Dr. Patel - Dermatologist">Dr. Patel - Dermatologist</option>
-                <option value="Dr. Lee - Neurologist">Dr. Lee - Neurologist</option>
-                <option value="Dr. Kumar - General Physician">Dr. Kumar - General Physician</option>
-            </select>
+            <input type="text" id="doctor" placeholder="Type the doctor's name correctly" required>
 
             <label for="date">Select Date:</label>
             <input type="date" id="date" required>

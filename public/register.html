@@ -3,60 +3,86 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Registration</title>
+  <title>Register</title>
 
   <style>
     /* General styling */
     body {
       font-family: 'Arial', sans-serif;
-      background-color: #f4f9fa; /* Soft, light background color */
+      background: url('images/plogin.png') no-repeat center center fixed;
+      background-size: cover;
       margin: 0;
       padding: 0;
       display: flex;
-      justify-content: center;
+      justify-content: flex-start;
       align-items: center;
-      height: 100vh;
+      height: 110vh;
+      padding-left: 10%;
     }
 
-    /* Form container */
-    .form-container {
-      background-color: #ffffff;
-      padding: 30px;
-      border-radius: 8px;
-      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    /* Dark overlay for better readability */
+    .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
       width: 100%;
-      max-width: 400px;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: 0;
+    }
+
+    /* Form container with transparency */
+    .form-container {
+      background-color: rgba(255, 255, 255, 0.2); /* More transparency */
+      padding: 40px;
+      border-radius: 8px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+      width: 100%;
+      max-width: 350px;
+      height: 450px;
+      z-index: 1;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      backdrop-filter: blur(3px); /* Glass effect */
     }
 
     /* Heading styling */
     h2 {
       text-align: center;
-      color: #005f73; /* Dark blue for professionalism */
-      margin-bottom: 20px;
+      color: #000000;
+      margin-bottom: 50px;
+      font-size: xx-large;
     }
 
     /* Label styling */
     label {
-      font-size: 14px;
-      color: #333;
-      margin-bottom: 5px;
+      font-size: 16px;
+      color: #000000;
+      margin-bottom: 10px;
       display: block;
     }
 
     /* Input field styling */
     input {
       width: 100%;
-      padding: 12px;
+      padding: 10px;
       margin-bottom: 20px;
-      border: 2px solid #ddd;
-      border-radius: 5px;
+      border: 2px solid rgba(255, 255, 255, 0.5);
+      border-radius: 7px;
       font-size: 16px;
-      background-color: #f9f9f9;
+      background-color: rgba(255, 255, 255, 0.3);
       transition: border-color 0.3s ease;
+      color: #000000;
+    }
+
+    input::placeholder {
+      color: rgba(0, 0, 0, 0.7);
     }
 
     input:focus {
-      border-color: #007f7f; /* Greenish color for focus state */
+      border-color: #007f7f;
       outline: none;
     }
 
@@ -64,17 +90,18 @@
     button {
       width: 100%;
       padding: 12px;
-      background-color: #007f7f; /* Calm and professional green-blue color */
+      background-color: #007f7f;
       color: white;
       font-size: 16px;
       border: none;
       border-radius: 5px;
       cursor: pointer;
       transition: background-color 0.3s ease;
+      margin-top: 10px;
     }
 
     button:hover {
-      background-color: #005f73; /* Darker green-blue on hover */
+      background-color: #005f73;
     }
 
     /* Center the "Already registered" link */
@@ -85,7 +112,7 @@
     }
 
     .login-link a {
-      color: #007f7f;
+      color: #000000;
       text-decoration: none;
     }
 
@@ -97,18 +124,20 @@
 </head>
 <body>
 
+  <div class="overlay"></div>
+
   <div class="form-container">
     <h2>Register</h2>
     <form action="/patient/register" method="POST">
       
       <label for="name">Full Name:</label>
-      <input type="text" id="name" name="name" required><br>
+      <input type="text" id="name" name="name" required placeholder="Enter your full name">
 
       <label for="phone">Phone Number:</label>
-      <input type="number" id="phone" name="phone" required><br>
+      <input type="tel" id="phone" name="phone" pattern="[0-9]{10}" required placeholder="Enter your phone number">
 
       <label for="password">Password:</label>
-      <input type="password" id="password" name="password" required><br>
+      <input type="password" id="password" name="password" required minlength="6" placeholder="Create a password">
 
       <button type="submit">Register</button>
 

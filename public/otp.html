@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enter OTP</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        input, button { width: 100%; padding: 10px; margin: 10px 0; }
+    </style>
+</head>
+<body>
+
+    <h2>Enter OTP</h2>
+    <p>Enter the 6-digit code from Google Authenticator:</p>
+    <form action="patient/verify-otp" method="post">
+        <input type="text" name="phone" placeholder="Phone Number" required>
+        <input type="text" name="token" placeholder="6-digit OTP" required>
+        <button type="submit">Verify</button>
+    </form>
+
+</body>
+</html>

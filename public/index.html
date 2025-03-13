@@ -1,68 +1,267 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Healthcare Portal</title>
-
-  <style>
-    /* General styling */
-    body {
-      font-family: 'Arial', sans-serif;
-      background-color: #f4f9fa;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-
-    /* Container styling */
-    .container {
-      background-color: #ffffff;
-      padding: 40px;
-      border-radius: 10px;
-      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-      text-align: center;
-      max-width: 400px;
-    }
-
-    /* Heading */
-    h1 {
-      color: #005f73;
-      margin-bottom: 20px;
-    }
-
-    /* Button styling */
-    .btn {
-      display: block;
-      width: 100%;
-      padding: 15px;
-      margin: 10px 0;
-      font-size: 18px;
-      color: white;
-      background-color: #007f7f;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-      text-decoration: none;
-    }
-
-    .btn:hover {
-      background-color: #005f73;
-    }
-
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASTROCARE</title>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script> 
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body, html {
+            height: 100%;
+            overflow-y: auto;
+        }
+        .container {
+            height: 200vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .top {
+            height: 110vh;
+            background-color: white;
+            position: relative;
+        }
+        .top img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .login-container {
+            position: absolute;
+            top: 50px;
+            right: 80px;
+        }
+        .login-btn {
+            background-color: rgba(0, 214, 204, 0.5);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 8px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease-in-out;
+        }
+        .login-btn:hover {
+            background-color: rgba(0, 42, 128, 0.5);
+            transform: scale(1.05);
+        }
+        .dropdown {
+          display: none;
+          position: absolute;
+          top: 50px;
+          left: 0;
+          background-color: rgba(0, 214, 204, 0.5);
+          border-radius: 8px;
+          box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+          overflow: hidden;
+          width: 100%;
+          min-width: 140px;
+      }
+      .dropdown a {
+          display: flex;
+          align-items: center;
+          padding: 15px 25px;
+          text-decoration: none;
+          color: white;
+          text-align: left;
+          transition: background 0.3s ease-in-out;
+          font-size: 18px;
+      }
+      .dropdown a:hover {
+          background-color: #002a80;
+      }
+      .dropdown a i {
+          margin-right: auto;
+          font-size: 22px;
+      }
+      .dropdown a span {
+          margin-left: auto;
+      }
+        .bottom {
+            flex: 4;
+            background-color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .services-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 90%;
+            max-width: 1400px;
+        }
+        .services {
+            width: 40%;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+        .right-services {
+            margin-left: 80px;
+        }
+        .service {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+        .service img {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background-color: #f5f5f5;
+            padding: 15px;
+        }
+        .service-content {
+            color: #333;
+        }
+        .service-content h3 {
+            color: #d63384;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .service-content p {
+            font-size: 16px;
+            color: #555;
+            margin-top: 8px;
+        }
+        .doctor-image {
+            width: 35%;
+            height: 100%;
+            text-align: center;
+        }
+        .doctor-image img {
+            width: 600px;
+            height: 350px;
+            max-width: 350px;
+            border-radius: 10px;
+            margin-left: 50px;
+        }
+        @media screen and (max-width: 768px) {
+            .services-container {
+                flex-direction: column;
+                text-align: center;
+            }
+            .services {
+                width: 100%;
+            }
+            .right-services {
+                margin-left: 0;
+            }
+            .service {
+                flex-direction: column;
+            }
+            .doctor-image {
+                width: 100%;
+            }
+            .white-box {
+              width: 90%;
+              max-width: 1200px;
+              height: 200px;
+              background-color: white;
+              box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+              margin: 50px auto;
+              padding: 20px;
+              border-radius: 10px;
+              text-align: center;
+          }
+          .red-box {
+            width: 90%;
+            max-width: 1200px;
+            height: 200px;
+            background-color: red;
+            margin: 50px auto;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+        }
+            
+        }
+        .header {
+            position: absolute;
+            top: 150px;
+            right: 60px;
+            font-size: 17px;
+            font-weight: bold;
+            color: rgb(255, 255, 255);
+            background: rgba(0, 214, 204, 0.7);
+            padding: 14px 20px;
+            border-radius: 8px;
+            text-align: right;
+            
+        }
+    </style>
 </head>
 <body>
+    <div class="container">
+      <div class="top">
+        <img src="images/index.png" alt="Top Image">
+        <div class="header"><i class="fas fa-phone"></i>       - CONTACT US : 8489161950</div>
+        <div class="login-container">
+            <button class="login-btn" onclick="toggleDropdown()">Login</button>
+            <div class="dropdown" id="dropdownMenu">
+                <a href="dlogin.html"><i class="fas fa-user-doctor"></i> <span>Doctor</span></a>
+                <a href="login.html"><i class="fas fa-user"></i> <span>Patient</span></a>
+            </div>
+        </div>
+    </div>
+        <div class="bottom">
+            <div class="services-container">
+                <div class="services">
+                    <div class="service"><img src="images/icon1.png"><div class="service-content"><h3>PROFESSIONAL DOCTORS</h3><p>Solving the unsolvable in health care.</p></div></div>
+                    <div class="service"><img src="images/icon2.png"><div class="service-content"><h3>EMERGENCY CARE</h3><p>You may not be ready for an emergency, but we are.</p></div></div>
+                    <div class="service"><img src="images/icon3.png"><div class="service-content"><h3>MEDICAL FACILITIES</h3><p>Advanced technologies and infrastructure.</p></div></div>
+                    <div class="service"><img src="images/icon4.png"><div class="service-content"><h3>24 HOURS SERVICE</h3><p>Always available for you.</p></div></div>
+                </div>
+                <div class="doctor-image"><img src="images/logo.jpg"></div>
+                <div class="services right-services">
+                    <div class="service"><img src="images/icon5.png"><div class="service-content"><h3>MEDICAL COUNSELING</h3><p>Comprehensive consultations for your needs.</p></div></div>
+                    <div class="service"><img src="images/icon6.png"><div class="service-content"><h3>REHABILITATION CENTER</h3><p>Complete rehabilitation services available.</p></div></div>
+                    <div class="service"><img src="images/icon7.png"><div class="service-content"><h3>SPECIAL CARE UNIT</h3><p>Providing a quiet healing environment.</p></div></div>
+                    <div class="service"><img src="images/icon 8.png"><div class="service-content"><h3>INHOUSE PHARMACY</h3><p>Available for all patient needs.</p></div></div>
+                </div>
+            </div>
+        
+        </div>
+        
+        
 
-  <div class="container">
-    <h1>Welcome to the Healthcare Portal</h1>
-    <a href="dlogin.html" class="btn">Doctor Login</a>
-    <a href="login.html" class="btn">Patient Login</a>
-  </div>
+    </div>
 
+    <script>
+      
+        function toggleDropdown() {
+            var dropdown = document.getElementById("dropdownMenu");
+            dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+        }
+    
+        // Close dropdown when clicking outside
+        document.addEventListener("click", function(event) {
+            var dropdown = document.getElementById("dropdownMenu");
+            var loginButton = document.querySelector(".login-btn");
+
+            if (!loginButton.contains(event.target) && !dropdown.contains(event.target)) {
+                dropdown.style.display = "none";
+            }
+        });
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js" crossorigin="anonymous"></script>
+    <footer style="background-color: #000000; text-align: center; padding: 15px; position: relative; width: 100%; font-size: 14px; color: #ffffff;">
+      © 2025 Astra Care Enterprise Ltd, All Rights Reserved | Contact: 8489161950 | Email: astro@gmail.com
+  </footer>
+  
+  
+
+    
 </body>
 </html>

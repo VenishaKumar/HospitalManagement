@@ -5,45 +5,145 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search Patient</title>
     <style>
-        body {
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 20px;
-            padding: 20px;
         }
+
+        body {
+            background: url('https://patient.lincolnhealthnetwork.com/assets/client_files/images/patientconnect/pc-hero-bg.jpg') 
+                        no-repeat center center/cover;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            width: 100vw;
+            align-items: center;
+        }
+
+        /* Navbar Styling */
+        .navbar {
+            background-color: rgba(0, 150, 255, 0.5);
+            color: white;
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.8);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-container img {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+        }
+
+        .logo-container b {
+            font-size: 2rem;
+        }
+
+        .navbar a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 0 20px;
+            font-size: 1.6rem;
+            transition: 0.3s;
+        }
+
+        .navbar a:hover {
+            color: #b3e5fc;
+        }
+
+        .logout-btn {
+            background: #0288d1;
+            color: #fff;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: #0277bd;
+        }
+
+        /* Search Container */
         .container {
-            max-width: 700px;
-            background: white;
-            padding: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 25px;
             border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-        }
-        h2 {
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            width: 95%;
+            max-width: 1100px;
             text-align: center;
+            margin-top: 50px;
         }
+
+        h2 {
+            color: #003366;
+            margin-bottom: 15px;
+            font-size: 26px;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 15px;
+            width: 100%;
+        }
+
         input {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
+            flex: 1;
+            padding: 18px;
+            border: 1.5px solid #ccc;
+            border-radius: 5px;
+            font-size: 20px;
         }
+
         button {
-            padding: 10px;
-            width: 100%;
-            background-color: blue;
+            padding: 18px;
+            background-color: #00d9ff;
             color: white;
             border: none;
+            border-radius: 5px;
+            font-size: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #result-container {
+            margin-top: 25px;
+            padding: 20px;
+            background: #f8f8f8;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            min-height: 70px;
+            text-align: left;
+            font-size: 18px;
+        }
+
+        @media (max-width: 768px) {
+            .search-box {
+                flex-direction: column;
+            }
+            input, button {
+                width: 100%;
+            }
         }
     </style>
-</head>
-<body>
-
-    <div class="container">
-        <h2>Search Patient</h2>
-        <input type="text" id="searchQuery" placeholder="Enter Name or Phone">
-        <button onclick="searchPatient()">Search</button>
-        <div id="result-container"></div>
-    </div>
-
     <script>
         async function searchPatient() {
             const query = document.getElementById("searchQuery").value;
@@ -51,7 +151,35 @@
             const resultHTML = await response.text();
             document.getElementById("result-container").innerHTML = resultHTML;
         }
-    </script>
 
+        function logout() {
+            fetch("/doctor/logoutDoctor")
+                .then(() => {
+                    window.location.href = "/dlogin.html";
+                });
+        }
+    </script>
+</head>
+<body>
+    <div class="navbar">
+        <div class="logo-container">
+            <img src="images/image.png" alt="Logo">
+            <b>AstraCare Hospital</b>
+        </div>
+        <div>
+            <a href="dhome.html">Home</a>
+            <a href="doctors.html">Doctors</a>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Search Patient</h2>
+        <div class="search-box">
+            <input type="text" id="searchQuery" placeholder="Enter Name or Phone">
+            <button onclick="searchPatient()">Search</button>
+        </div>
+        <div id="result-container">Results will appear here...</div>
+    </div>
 </body>
 </html>

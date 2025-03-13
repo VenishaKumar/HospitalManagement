@@ -1,12 +1,14 @@
 const express = require("express");
 const path = require("path"); // Add this
-const { registerPatient, loginPatient, logoutPatient, getAppointments, bookAppointment, getPrescriptions ,getPatientProfile, updatePatientProfile} = require("./controller");
+const { registerPatient, loginPatient, logoutPatient, getAppointments, bookAppointment, getPrescriptions ,getPatientProfile, updatePatientProfile,verifyAuthenticatorOTP,enable2FA} = require("./controller");
 
 const router = express.Router();
 
 // POST route for patient registration
 router.post("/register", registerPatient);
 router.post("/login", loginPatient);
+router.post("/verify-otp", verifyAuthenticatorOTP);
+router.get("/enable-2fa", enable2FA);
 router.get("/logout",logoutPatient)
 // Get Patient Profile
 router.get("/profile", getPatientProfile);

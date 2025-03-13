@@ -5,42 +5,217 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Patient Profile</title>
     <style>
+
+.navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #007bff;
+            padding: 15px 30px;
+            color: white;
+            width: 100%;
+            padding-top: 70px;
+            position: fixed; /* Fixes the navbar to the top */
+    top: 0; /* Aligns it to the very top */
+    left: 0;
+    z-index: 1000;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .navbar .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+        .navbar .logo img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 10px;
+        }
+        .navbar .nav-links {
+            display: flex;
+            gap: 15px;
+        }
+        .nav-links button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1em;
+            cursor: pointer;
+        }
+        /* General Styling */
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 20px;
-            padding: 20px;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: url('https://i.pinimg.com/originals/4a/97/15/4a971554c8c61f8119469796b201c7f4.png') 
+                        no-repeat center center/cover;
         }
-        .container {
-            max-width: 500px;
+
+        /* Main Layout */
+        .main-container {
+            display: flex;
+            width: 80%;
+            max-width: 900px;
             background: white;
-            padding: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
             border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
         }
+
+        /* Left Panel - Branding */
+        .left-panel {
+            width: 40%;
+            background: rgba(0, 127, 127, 0.9);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 30px;
+        }
+
+        .left-panel h1 {
+            font-size: 26px;
+            margin-bottom: 10px;
+        }
+
+        .left-panel p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        /* Right Panel - Profile */
+        .profile-container {
+            width: 60%;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
         h2 {
+            color: #005f73;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        /* Profile content box */
+        .profile-content {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            font-size: 16px;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .profile-field {
+            font-weight: bold;
+            color: #005f73;
+        }
+
+        /* Update Button */
+        .update-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #007f7f;
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
             text-align: center;
         }
+
+        .update-btn:hover {
+            background-color: #005f73;
+        }
+
+        /* Loading & Error styling */
+        .loading, .error {
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+        }
+        .loading { color: #333; }
+        .error { color: red; }
     </style>
 </head>
 <body>
+    <div class="navbar">
+        <div class="logo">
+            <img src="images/image.png" alt="Logo">
+            AstroCare
+        </div>
+        <div class="nav-links">
+            <button onclick="window.location.href='/home.html'">Home</button>
+            <button onclick="window.location.href='/doctor.html'">Doctor</button>
+            <button onclick="viewProfile()">View Profile</button>
+            <button onclick="enable2FA()">2FA</button>
+            <button onclick="logout()">Logout</button>
+        </div>
+    </div>
 
-    <div class="container" id="profile-container">
-        <h2>Loading Profile...</h2>
+    <div class="main-container">
+        <!-- Left Panel -->
+        <div class="left-panel">
+            <h1>Welcome to HealthNet</h1>
+            <p>Your trusted healthcare partner</p>
+        </div>
+
+        <!-- Right Panel - Patient Profile -->
+        <div class="profile-container" id="profile-container">
+            <h2 class="loading">Loading Profile...</h2>
+        </div>
     </div>
 
     <script>
+        function logout() {
+            fetch("/patient/logout").then(() => {
+                window.location.href = "/login.html";
+            });
+        }
+        function viewProfile() {
+            window.location.href = "/profile.html";
+        }
+        function viewdoctor() {
+            window.location.href = "/doctor.html";
+        }
+        function viewhome() {
+            window.location.href = "/home.html";
+        }
+        function enable2FA() {
+            window.location.href = "patient/enable-2fa";
+        }
+
         document.addEventListener("DOMContentLoaded", async () => {
             try {
-                const response = await fetch("patient/profile"); // Fetch HTML response
-                const profileHTML = await response.text(); // Convert to text
-
-                document.getElementById("profile-container").innerHTML = profileHTML;
+                const response = await fetch("patient/profile"); // Fetch profile data
+                const profileHTML = await response.text(); // Convert response to HTML
+                
+                document.getElementById("profile-container").innerHTML = profileHTML + 
+                    `<button class="update-btn" onclick="updateProfile()">Update Profile</button>`;
             } catch (error) {
                 console.error("❌ Error fetching patient profile:", error);
-                document.getElementById("profile-container").innerHTML = "<h3>Error loading patient profile</h3>";
+                document.getElementById("profile-container").innerHTML = 
+                    "<h2 class='error'>Error loading patient profile</h2>";
             }
         });
+
+        function updateProfile() {
+            window.location.href = "profile.html"; // Redirect to update page
+        }
     </script>
 
 </body>

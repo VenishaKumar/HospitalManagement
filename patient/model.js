@@ -24,6 +24,29 @@ const findPatientByphone = async (phone) => {
     await client.close();
   }
 };
+const updatePatient2FA = async (phone, secret) => {
+  try {
+      await client.connect();
+      const db = client.db(dbName);
+      const collection = db.collection("patients");
+      await collection.updateOne({ phone }, { $set: { secret } });
+  } finally {
+      await client.close();
+  }
+};
+
+// Get Patient's 2FA Secret Key
+const getPatient2FASecret = async (phone) => {
+  try {
+      await client.connect();
+      const db = client.db(dbName);
+      const collection = db.collection("patients");
+      const patient = await collection.findOne({ phone });
+      return patient ? patient.secret : null;
+  } finally {
+      await client.close();
+  }
+};
 
 const saveAppointment = async (appointment) => {
   try {
@@ -38,11 +61,11 @@ const saveAppointment = async (appointment) => {
 };
 
 // Find appointments by user ID
-const findAppointmentsByUser = async (userId) => {
+const findAppointmentsByUser = async (name) => {
   try {
       const db = await connectDB(); 
       const collection = db.collection("Appointments");
-      return await collection.find({ userId: userId }).toArray();
+      return await collection.find({ name: name }).toArray();
   } catch (error) {
       console.error("Error retrieving appointments:", error);
       throw error;
@@ -82,4 +105,4 @@ const updatePatient = async (phone, updatedData) => {
 
 
 
-module.exports = { savePatient, findPatientByphone ,saveAppointment, findAppointmentsByUser,getPrescriptionsByPhone,updatePatient};
+module.exports = { savePatient, findPatientByphone ,saveAppointment, findAppointmentsByUser,getPrescriptionsByPhone,updatePatient,updatePatient2FA, getPatient2FASecret};
