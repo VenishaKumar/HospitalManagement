@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hospital-app
+  namespace: default
+  labels:
+    app: hospital
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: hospital
+  template:
+    metadata:
+      labels:
+        app: hospital
+    spec:
+      containers:
+        - name: hospital-app
+          image: venisha0507/hospital-app:v2  
+          ports:
+            - containerPort: 8080
+          env:
+            - name: MONGO_URL
+              value: "mongodb://mongo-service:27017/healthcare"
