@@ -3,7 +3,7 @@ name: Deploy to EKS
 on:
   push:
     branches:
-      - main  # Change this if your default branch is different
+      - main  # Runs workflow on push to main branch
 
 jobs:
   build:
@@ -31,15 +31,21 @@ jobs:
         curl -sSLO "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_Linux_amd64.tar.gz"
         tar -xzf eksctl_Linux_amd64.tar.gz
         sudo mv eksctl /usr/local/bin/
-      
-    - name: Login to Amazon ECR
+
+    - name: Login to Docker Hub
+      env:
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       run: |
-        aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com
+        echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 
     - name: Build and Push Docker Image
+      env:
+        IMAGE_TAG: latest
+        DOCKER_REPO: ${{ secrets.DOCKER_USERNAME }}/hospital-app
       run: |
-        docker build -t ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com/my-app:latest .
-        docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com/my-app:latest
+        docker build -t $DOCKER_REPO:$IMAGE_TAG .
+        docker push $DOCKER_REPO:$IMAGE_TAG
 
     - name: Deploy to EKS
       run: |
